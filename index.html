@@ -3,529 +3,713 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quiz – Injection Diesel | BTS MVVP</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+<title>BTS MVVP – Évaluation Générale</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap');
+
   :root {
-    --blue: #2563EB; --blue-light: #EFF6FF; --blue-mid: #BFDBFE;
-    --green: #16A34A; --green-light: #F0FDF4; --green-mid: #BBF7D0;
-    --red: #DC2626; --red-light: #FEF2F2; --red-mid: #FECACA;
-    --orange: #EA580C; --orange-light: #FFF7ED;
-    --purple: #7C3AED; --purple-light: #F5F3FF;
-    --gray-50: #F8FAFC; --gray-100: #F1F5F9; --gray-200: #E2E8F0;
-    --gray-400: #94A3B8; --gray-600: #475569; --gray-800: #1E293B; --gray-900: #0F172A;
-    --radius: 14px; --radius-sm: 10px;
+    --bg: #0D1117;
+    --surface: #161B22;
+    --card: #1C2333;
+    --border: #30363D;
+    --accent: #F97316;
+    --accent2: #3B82F6;
+    --accent3: #10B981;
+    --danger: #EF4444;
+    --text: #E6EDF3;
+    --muted: #8B949E;
+    --correct: #10B981;
+    --wrong: #EF4444;
   }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'DM Sans', sans-serif; background: linear-gradient(135deg, #EFF6FF 0%, #F5F3FF 50%, #FFF7ED 100%); color: var(--gray-800); min-height: 100vh; padding: 1rem; }
-  .container { max-width: 640px; margin: 0 auto; padding-bottom: 3rem; }
-  .header { text-align: center; padding: 2rem 0 1.5rem; }
-  .header .badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #2563EB, #7C3AED); color: #fff; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 6px 16px; border-radius: 99px; margin-bottom: 1rem; }
-  .header h1 { font-size: 26px; font-weight: 600; color: var(--gray-900); line-height: 1.3; margin-bottom: 0.4rem; }
-  .header p { font-size: 14px; color: var(--gray-600); }
-  .card { background: #fff; border-radius: var(--radius); border: 1.5px solid var(--gray-200); padding: 1.75rem; margin-bottom: 1rem; box-shadow: 0 2px 12px rgba(37,99,235,0.07); }
-  .card label { display: block; font-size: 13px; font-weight: 600; color: var(--gray-600); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
-  .card input[type="text"] { width: 100%; padding: 12px 14px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 16px; color: var(--gray-800); outline: none; transition: border-color 0.2s; }
-  .card input[type="text"]:focus { border-color: var(--blue); }
-  .info-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 1.25rem; }
-  .info-item { background: linear-gradient(135deg, #EFF6FF, #F5F3FF); border-radius: var(--radius-sm); padding: 12px 14px; border: 1px solid var(--blue-mid); }
-  .info-item .val { font-size: 20px; font-weight: 600; color: var(--blue); }
-  .info-item .lbl { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
-  .ref-block { background: #fff; border-radius: var(--radius); border: 1.5px solid var(--gray-200); padding: 1.25rem 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 12px rgba(37,99,235,0.07); }
-  .ref-block .ref-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--purple); margin-bottom: 1rem; display: flex; align-items: center; gap: 6px; }
-  .ref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1rem; }
-  .ref-comp { display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px; background: var(--purple-light); border-radius: var(--radius-sm); border: 1px solid #DDD6FE; }
-  .ref-comp .code { font-size: 12px; font-weight: 700; color: var(--purple); font-family: 'DM Mono', monospace; flex-shrink: 0; margin-top: 1px; }
-  .ref-comp .label { font-size: 12px; color: #4C1D95; line-height: 1.4; }
-  .ref-savoirs { border-top: 1px solid var(--gray-200); padding-top: 10px; margin-top: 4px; }
-  .ref-savoirs .stitle { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--orange); margin-bottom: 6px; }
-  .savoir-item { display: flex; align-items: flex-start; gap: 8px; padding: 6px 10px; background: var(--orange-light); border-radius: var(--radius-sm); border: 1px solid #FED7AA; margin-bottom: 6px; }
-  .savoir-item .scode { font-size: 12px; font-weight: 700; color: var(--orange); font-family: 'DM Mono', monospace; flex-shrink: 0; }
-  .savoir-item .slabel { font-size: 12px; color: #7C2D12; line-height: 1.4; }
-  .btn { display: block; width: 100%; padding: 14px; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s; text-align: center; }
-  .btn-primary { background: linear-gradient(135deg, #2563EB, #7C3AED); color: #fff; }
-  .btn-primary:hover { opacity: 0.92; transform: translateY(-1px); }
-  .btn-primary:disabled { background: var(--gray-200); color: var(--gray-400); cursor: not-allowed; transform: none; }
-  .btn-outline { background: transparent; color: var(--blue); border: 1.5px solid var(--blue); margin-top: 10px; }
-  .btn-outline:hover { background: var(--blue-light); }
-  .progress-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 13px; color: var(--gray-600); font-weight: 500; }
-  .progress-track { height: 7px; background: var(--gray-200); border-radius: 99px; margin-bottom: 1.25rem; overflow: hidden; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, #2563EB, #7C3AED); border-radius: 99px; transition: width 0.4s ease; }
-  .timer-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 1rem; }
-  .timer-circle { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 600; font-family: 'DM Mono', monospace; border: 3px solid var(--blue); color: var(--blue); background: var(--blue-light); transition: all 0.5s; }
-  .timer-circle.warning { border-color: var(--orange); color: var(--orange); background: var(--orange-light); }
-  .timer-circle.danger { border-color: var(--red); color: var(--red); background: var(--red-light); animation: pulse 0.5s infinite; }
-  @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
-  .theme-tag { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; padding: 4px 12px; border-radius: 99px; margin-bottom: 1rem; }
-  .theme-A { background: #EFF6FF; color: #1D4ED8; }
-  .theme-B { background: #F5F3FF; color: #5B21B6; }
-  .theme-C { background: #FFF7ED; color: #C2410C; }
-  .theme-D { background: #F0FDF4; color: #15803D; }
-  .theme-E { background: #FEF2F2; color: #B91C1C; }
-  .question { font-size: 17px; font-weight: 500; color: var(--gray-900); line-height: 1.55; margin-bottom: 1.25rem; }
-  .options { display: flex; flex-direction: column; gap: 10px; }
-  .opt { display: flex; align-items: center; gap: 12px; padding: 13px 15px; border-radius: var(--radius-sm); border: 1.5px solid var(--gray-200); background: #fff; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--gray-800); text-align: left; transition: border-color 0.15s, background 0.15s, transform 0.1s; width: 100%; }
-  .opt:hover:not(:disabled) { border-color: var(--blue); background: var(--blue-light); transform: translateX(3px); }
-  .opt:disabled { cursor: default; }
-  .opt.correct { border-color: var(--green); background: var(--green-light); color: #14532D; }
-  .opt.wrong { border-color: var(--red); background: var(--red-light); color: #7F1D1D; }
-  .opt-letter { width: 34px; height: 34px; border-radius: 50%; background: var(--gray-100); color: var(--gray-600); font-size: 13px; font-weight: 600; font-family: 'DM Mono', monospace; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .opt.correct .opt-letter { background: var(--green); color: #fff; }
-  .opt.wrong .opt-letter { background: var(--red); color: #fff; }
-  .feedback { margin-top: 1rem; border-radius: var(--radius-sm); padding: 14px 16px; display: none; font-size: 14px; line-height: 1.6; }
-  .feedback.correct { background: var(--green-light); border: 1.5px solid var(--green-mid); color: #14532D; }
-  .feedback.wrong { background: var(--red-light); border: 1.5px solid var(--red-mid); color: #7F1D1D; }
-  .feedback strong { display: block; font-size: 15px; margin-bottom: 4px; }
-  .next-btn { margin-top: 1rem; display: none; }
-  .result-hero { text-align: center; padding: 2rem 1rem 1.5rem; }
-  .result-hero .icon { font-size: 52px; margin-bottom: 0.75rem; }
-  .result-hero h2 { font-size: 24px; font-weight: 600; color: var(--gray-900); margin-bottom: 0.5rem; }
-  .score-display { font-size: 60px; font-weight: 600; font-family: 'DM Mono', monospace; background: linear-gradient(135deg, #2563EB, #7C3AED); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 0.5rem 0; }
-  .mention { display: inline-block; padding: 6px 20px; border-radius: 99px; font-size: 13px; font-weight: 600; margin-bottom: 1.5rem; }
-  .mention.excellent { background: var(--green-light); color: var(--green); }
-  .mention.bien { background: var(--blue-light); color: var(--blue); }
-  .mention.passable { background: var(--orange-light); color: var(--orange); }
-  .mention.insuffisant { background: var(--red-light); color: var(--red); }
-  .recap-list { display: flex; flex-direction: column; gap: 8px; margin-top: 0.5rem; }
-  .recap-item { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--gray-600); line-height: 1.5; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--gray-50); border: 1px solid var(--gray-200); }
-  .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
-  .dot.ok { background: var(--green); }
-  .dot.ko { background: var(--red); }
-  .sending-msg { text-align: center; font-size: 13px; color: var(--gray-400); padding: 0.75rem; }
-  .erreur-item { border-radius: var(--radius-sm); border: 1.5px solid var(--red-mid); background: var(--red-light); padding: 14px 16px; margin-bottom: 12px; }
-  .erreur-item .erreur-theme { font-size: 11px; font-weight: 600; color: var(--red); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
-  .erreur-item .erreur-q { font-size: 14px; font-weight: 600; color: var(--gray-900); margin-bottom: 8px; line-height: 1.4; }
-  .erreur-item .erreur-bonne { font-size: 13px; color: var(--green); font-weight: 600; margin-bottom: 6px; }
-  .erreur-item .erreur-expl { font-size: 13px; color: var(--gray-600); line-height: 1.6; border-top: 1px solid var(--red-mid); padding-top: 8px; margin-top: 4px; }
-  .screen { display: none; }
-  .screen.active { display: block; }
-  @media (max-width: 480px) {
-    .question { font-size: 15px; } .opt { font-size: 14px; padding: 11px 12px; }
-    .score-display { font-size: 44px; } .info-grid { grid-template-columns: 1fr 1fr; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
   }
-  .code-input-wrap { position: relative; margin-bottom: 1rem; }
-  .code-input-wrap input[type="password"] { width: 100%; padding: 12px 14px 12px 44px; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); font-family: 'DM Mono', monospace; font-size: 20px; letter-spacing: 0.2em; color: var(--gray-800); outline: none; transition: border-color 0.2s; text-align: center; }
-  .code-input-wrap input[type="password"]:focus { border-color: var(--blue); }
-  .lock-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 18px; }
-  .code-error { color: var(--red); font-size: 13px; margin-top: 6px; display: none; font-weight: 500; }
-  #screen-code .card { text-align: center; }
-  #screen-code .card label { text-align: center; display: block; font-size: 14px; margin-bottom: 12px; text-transform: none; letter-spacing: 0; color: var(--gray-600); }
+
+  .screen { display: none; width: 100%; max-width: 700px; }
+  .screen.active { display: block; }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .header .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 3px;
+    margin-bottom: 14px;
+  }
+  .header h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 38px;
+    color: var(--text);
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .header h1 span { color: var(--accent); }
+  .header p {
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  /* THEMES GRID */
+  .themes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+  .theme-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+  .theme-card .icon { font-size: 24px; margin-bottom: 8px; }
+  .theme-card .label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .theme-card .count {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* INFO */
+  .info-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .info-box {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+  }
+  .info-box .val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 28px;
+    color: var(--accent);
+  }
+  .info-box .lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* INPUT */
+  .input-group { margin-bottom: 20px; }
+  .input-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .input-group input {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 16px;
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .input-group input:focus { border-color: var(--accent); }
+
+  /* BTN */
+  .btn {
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 14px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: opacity .2s, transform .1s;
+  }
+  .btn:hover:not(:disabled) { opacity: .9; transform: translateY(-1px); }
+  .btn:disabled { opacity: .35; cursor: not-allowed; }
+  .btn.secondary {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    margin-top: 10px;
+  }
+
+  /* QUIZ SCREEN */
+  .quiz-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .q-info {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .score-badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 14px;
+    color: var(--text);
+  }
+
+  .timer-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .timer-circle {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    border: 3px solid var(--accent2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    color: var(--accent2);
+    transition: border-color .3s, color .3s;
+  }
+  .timer-circle.warning { border-color: var(--accent); color: var(--accent); }
+  .timer-circle.danger { border-color: var(--danger); color: var(--danger); }
+
+  .progress-bar {
+    background: var(--surface);
+    border-radius: 4px;
+    height: 5px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 4px;
+    transition: width .4s ease;
+  }
+
+  .theme-tag {
+    display: inline-block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+  .th-liaison { background: #F97316; color: #fff; }
+  .th-clim    { background: #3B82F6; color: #fff; }
+  .th-diesel  { background: #10B981; color: #fff; }
+
+  .q-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 1.3;
+    color: var(--text);
+    margin-bottom: 22px;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 13px 16px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: border-color .15s, background .15s;
+  }
+  .opt:hover:not(:disabled) { border-color: var(--accent); background: #1e2a3a; }
+  .opt:disabled { cursor: default; }
+  .opt.correct { border-color: var(--correct); background: #0e2a1e; color: #fff; }
+  .opt.wrong   { border-color: var(--wrong); background: #2a0e0e; color: #fff; }
+  .opt-letter {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+  .opt.correct .opt-letter { background: var(--correct); color: #fff; }
+  .opt.wrong   .opt-letter { background: var(--wrong); color: #fff; }
+
+  /* FEEDBACK */
+  .feedback {
+    margin-top: 18px;
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: none;
+  }
+  .feedback.correct { background: #0e2a1e; border: 1.5px solid var(--correct); }
+  .feedback.wrong   { background: #2a0e0e; border: 1.5px solid var(--wrong); }
+  .fb-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+  .feedback.correct .fb-title { color: var(--correct); }
+  .feedback.wrong .fb-title   { color: var(--wrong); }
+  .fb-text { font-size: 13.5px; color: var(--muted); line-height: 1.6; }
+
+  .next-btn {
+    margin-top: 16px;
+    display: none;
+  }
+
+  /* RESULTS */
+  .res-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .res-icon { font-size: 48px; margin-bottom: 10px; }
+  .res-score {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 52px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .res-pct { font-size: 15px; color: var(--muted); margin-bottom: 12px; }
+  .mention {
+    display: inline-block;
+    border-radius: 6px;
+    padding: 5px 14px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .mention.excellent { background: #0e2a1e; color: var(--correct); border: 1px solid var(--correct); }
+  .mention.bien      { background: #1e2a1a; color: #84cc16; border: 1px solid #84cc16; }
+  .mention.passable  { background: #2a1e0e; color: var(--accent); border: 1px solid var(--accent); }
+  .mention.insuffisant { background: #2a0e0e; color: var(--danger); border: 1px solid var(--danger); }
+
+  /* RECAP */
+  .recap-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+  .recap-section h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--danger);
+    margin-bottom: 12px;
+  }
+  .erreur-item {
+    border: 1px solid #2a1515;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #160a0a;
+  }
+  .erreur-theme {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent);
+    margin-bottom: 5px;
+  }
+  .erreur-q { font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 6px; }
+  .erreur-bonne { font-size: 13px; color: var(--correct); font-weight: 600; margin-bottom: 5px; }
+  .erreur-expl { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+
+  .sending-msg { text-align: center; font-size: 13px; color: var(--muted); margin-top: 10px; }
 </style>
 </head>
 <body>
-<div class="container">
-  <!-- ÉCRAN CODE D'ACCÈS -->
-  <div id="screen-code" class="screen active">
-    <div class="header">
-      <div class="badge">⚙ BTS MVVP – Injection Diesel</div>
-      <h1>Quiz Formatif</h1>
-      <p>Accès restreint – Saisir le code d'accès</p>
-    </div>
-    <div class="card">
-      <label>🔐 Entrez le code d'accès pour démarrer le quiz</label>
-      <div class="code-input-wrap">
-        <span class="lock-icon">🔒</span>
-        <input type="password" id="access-code" placeholder="• • • • • •" maxlength="10" oninput="checkCode()" onkeydown="if(event.key==='Enter')validerCode()" />
-      </div>
-      <div class="code-error" id="code-error">❌ Code incorrect. Vérifiez auprès de votre formateur.</div>
-      <button class="btn btn-primary" id="btn-code" disabled onclick="validerCode()" style="margin-top:1rem">Valider →</button>
-    </div>
-  </div>
+
+<!-- SCREEN 1: Accueil -->
+<div id="screen-home" class="screen active">
   <div class="header">
-    <div class="badge">⚙ BTS MVVP – Injection Diesel</div>
-    <h1>Quiz Formatif</h1>
-    <p>Correction immédiate · 30 secondes par question</p>
+    <div class="badge">GRETA-CFA 49</div>
+    <h1>BTS MVVP<br><span>Évaluation Générale</span></h1>
+    <p>Liaison au sol · Climatisation · Injection Diesel</p>
   </div>
 
-  <div id="screen-accueil" class="screen">
-    <div class="ref-block">
-      <div class="ref-title">📋 Compétences du référentiel BTS MV mobilisées</div>
-      <div class="ref-grid">
-        <div class="ref-comp"><span class="code">C1.1</span><span class="label">Décrire le fonctionnement du système</span></div>
-        <div class="ref-comp"><span class="code">C1.2</span><span class="label">Identifier les grandeurs d'entrée/sortie</span></div>
-        <div class="ref-comp"><span class="code">C1.3</span><span class="label">Caractériser les performances du système</span></div>
-        <div class="ref-comp"><span class="code">C2.1</span><span class="label">Valider le dysfonctionnement</span></div>
-        <div class="ref-comp"><span class="code">C2.2</span><span class="label">Émettre des hypothèses liées aux symptômes</span></div>
-        <div class="ref-comp"><span class="code">C2.3</span><span class="label">Effectuer des mesures et des essais</span></div>
-        <div class="ref-comp"><span class="code">C2.4</span><span class="label">Déterminer les éléments défaillants</span></div>
-        <div class="ref-comp"><span class="code">C3.2</span><span class="label">Remettre en conformité, régler, paramétrer</span></div>
-      </div>
-      <div class="ref-savoirs">
-        <div class="stitle">Savoirs associés</div>
-        <div class="savoir-item"><span class="scode">S2.1</span><span class="slabel">Injection HP diesel – Common Rail – combustion – caractéristiques des combustibles</span></div>
-        <div class="savoir-item"><span class="scode">S2.2</span><span class="slabel">Capteurs, calculateurs, actionneurs – injecteurs magnétiques et piézoélectriques</span></div>
-      </div>
+  <div class="themes-grid">
+    <div class="theme-card">
+      <div class="icon">🔧</div>
+      <div class="label">Liaison au sol</div>
+      <div class="count">10 questions</div>
     </div>
-    <div class="card">
-      <label for="prenom">Ton prénom et nom</label>
-      <input type="text" id="prenom" placeholder="Ex : Lucas Martin" oninput="checkPrenom()" />
-      <div class="info-grid">
-        <div class="info-item"><div class="val">46</div><div class="lbl">Questions</div></div>
-        <div class="info-item"><div class="val">30s</div><div class="lbl">Par question</div></div>
-        <div class="info-item"><div class="val">~23 min</div><div class="lbl">Durée estimée</div></div>
-      </div>
+    <div class="theme-card">
+      <div class="icon">❄️</div>
+      <div class="label">Climatisation</div>
+      <div class="count">10 questions</div>
     </div>
-    <button class="btn btn-primary" id="btn-start" disabled onclick="startQuiz()">Commencer le quiz →</button>
-  </div>
-
-  <div id="screen-quiz" class="screen">
-    <div class="progress-row">
-      <span id="q-num">Question 1 / 50</span>
-      <span id="q-score">Score : 0</span>
-    </div>
-    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-    <div class="card">
-      <div class="timer-row"><div class="timer-circle" id="timer-circle">30</div></div>
-      <div class="theme-tag theme-A" id="q-theme"></div>
-      <div class="question" id="q-text"></div>
-      <div class="options" id="q-options"></div>
-      <div class="feedback" id="feedback">
-        <strong id="fb-title"></strong>
-        <span id="fb-text"></span>
-      </div>
-      <button class="btn btn-primary next-btn" id="next-btn"></button>
+    <div class="theme-card">
+      <div class="icon">⛽</div>
+      <div class="label">Injection Diesel</div>
+      <div class="count">10 questions</div>
     </div>
   </div>
 
-  <div id="screen-results" class="screen">
-    <div class="card">
-      <div class="result-hero">
-        <div class="icon" id="res-icon"></div>
-        <h2>Quiz terminé !</h2>
-        <div class="score-display" id="res-score"></div>
-        <div style="font-size:14px;color:var(--gray-400);margin-bottom:0.75rem" id="res-pct"></div>
-        <div class="mention" id="res-mention"></div>
-      </div>
-      <div class="sending-msg" id="sending-msg"></div>
-      <div id="recap-title" style="font-size:13px;font-weight:600;color:var(--gray-600);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;display:none">Détail par question</div>
-      <div class="recap-list" id="recap-list"></div>
-    </div>
-    <div class="card" id="erreurs-card" style="display:none; border-left: 4px solid var(--red);">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
-        <div>
-          <div style="font-size:13px;font-weight:600;color:var(--red);text-transform:uppercase;letter-spacing:0.05em;">Mes erreurs à retravailler</div>
-          <div style="font-size:12px;color:var(--gray-400);margin-top:2px" id="nb-erreurs"></div>
-        </div>
-        <button class="btn" onclick="telechargerPDF()" style="width:auto;padding:8px 16px;background:linear-gradient(135deg,#DC2626,#EA580C);color:#fff;font-size:13px;border-radius:99px;">⬇ Fiche révision</button>
-      </div>
-      <div id="erreurs-list"></div>
-    </div>
-    <button class="btn btn-outline" onclick="restart()">↺ Recommencer</button>
+  <div class="info-row">
+    <div class="info-box"><div class="val">30</div><div class="lbl">Questions</div></div>
+    <div class="info-box"><div class="val">30s</div><div class="lbl">Par question</div></div>
+    <div class="info-box"><div class="val">~15min</div><div class="lbl">Durée estimée</div></div>
   </div>
+
+  <div class="input-group">
+    <label>Ton prénom et nom</label>
+    <input type="text" id="prenom" placeholder="Ex : Jonathan Priou" oninput="checkPrenom()">
+  </div>
+
+  <button class="btn" id="btn-start" onclick="startQuiz()" disabled>Commencer l'évaluation →</button>
+</div>
+
+<!-- SCREEN 2: Quiz -->
+<div id="screen-quiz" class="screen">
+  <div class="quiz-header">
+    <div class="q-info" id="q-num">Question 1 / 30</div>
+    <div class="score-badge">Score : <span id="q-score">0</span></div>
+  </div>
+
+  <div class="timer-wrap">
+    <div class="timer-circle" id="timer-circle">30</div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+
+  <div class="theme-tag" id="q-theme">Thème</div>
+  <div class="q-text" id="q-text">Question…</div>
+
+  <div class="options" id="q-options"></div>
+
+  <div class="feedback" id="feedback">
+    <div class="fb-title" id="fb-title"></div>
+    <div class="fb-text" id="fb-text"></div>
+  </div>
+
+  <button class="btn next-btn" id="next-btn">Question suivante →</button>
+</div>
+
+<!-- SCREEN 3: Résultats -->
+<div id="screen-results" class="screen">
+  <div class="header">
+    <div class="badge">Résultats</div>
+    <h1>Quiz <span>Terminé !</span></h1>
+  </div>
+
+  <div class="res-card">
+    <div class="res-icon" id="res-icon">🏆</div>
+    <div class="res-score" id="res-score">0 / 30</div>
+    <div class="res-pct" id="res-pct">soit 0%</div>
+    <div class="mention" id="res-mention">Résultat</div>
+  </div>
+
+  <div class="recap-section" id="erreurs-card" style="display:none">
+    <h3>❌ Erreurs à retravailler (<span id="nb-erreurs"></span>)</h3>
+    <div id="erreurs-list"></div>
+  </div>
+
+  <div class="sending-msg" id="sending-msg"></div>
+
+  <button class="btn" id="btn-download" onclick="telechargerFiche()" style="display:none; background:#10B981; margin-bottom:10px;">⬇ Télécharger ma fiche de révision</button>
+  <button class="btn secondary" onclick="restart()">↺ Recommencer</button>
 </div>
 
 <script>
 const TIMER_DURATION = 30;
 const LETTERS = ['A','B','C','D'];
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzfIIneiWdlLu2ys7Bfn6bONZjNLxADRu5tUciwLEaV58KjqClZsWrth5U5_rg8ttKy/exec";
-const ACCESS_CODE = "DIESEL46";
-
-function checkCode() {
-  document.getElementById('btn-code').disabled = document.getElementById('access-code').value.trim().length < 3;
-  document.getElementById('code-error').style.display = 'none';
-}
-
-function validerCode() {
-  const val = document.getElementById('access-code').value.trim().toUpperCase();
-  if (val === ACCESS_CODE) {
-    show('screen-accueil');
-  } else {
-    document.getElementById('code-error').style.display = 'block';
-    document.getElementById('access-code').value = '';
-    document.getElementById('btn-code').disabled = true;
-  }
-}
 
 const questions = [
 
-  // ===== COMMON RAIL – GÉNÉRALITÉS =====
-  { theme:"Common Rail", tc:"theme-A",
+  // ===== LIAISON AU SOL – 10 questions =====
+  {
+    theme:"Liaison au sol", tc:"th-liaison",
+    q:"Qu'est-ce que le sous-virage ?",
+    opts:["L'angle de dérive AR > angle de dérive AV","L'angle de dérive AV > angle de dérive AR","Le véhicule tourne trop vite autour de GZ","Le carrossage est trop négatif"],
+    correct:1,
+    expl:"Un véhicule est sous-vireur quand l'angle de dérive de l'essieu avant dépasse celui de l'arrière. La vitesse de lacet est insuffisante, le véhicule ne suit pas la courbe désirée."
+  },
+  {
+    theme:"Liaison au sol", tc:"th-liaison",
+    q:"Quelle est la définition de la chasse ?",
+    opts:["Angle entre l'axe de pivot et la verticale, vu de face","Inclinaison de l'axe de pivotement par rapport à la verticale, véhicule vu de profil","Distance entre centre de contact et prolongement de l'axe de pivot","Angle entre plan médian de la roue et l'axe de géométrie"],
+    correct:1,
+    expl:"La chasse est l'inclinaison de l'axe de pivotement de la roue par rapport à la verticale, véhicule vu de profil. Elle assure le rappel des roues en ligne droite après un braquage."
+  },
+  {
+    theme:"Liaison au sol", tc:"th-liaison",
+    q:"Quel est le rôle de la chasse ?",
+    opts:["Réduire le déport au sol","Rappel des roues en ligne droite et stabilité du véhicule","Améliorer l'adhérence des pneumatiques","Réduire l'usure des bords extérieurs des pneus"],
+    correct:1,
+    expl:"La chasse assure le rappel des roues en ligne droite après un braquage et garantit la stabilité du véhicule. La charge fait varier l'assiette du véhicule et augmente l'angle de chasse."
+  },
+  {
+    theme:"Liaison au sol", tc:"th-liaison",
+    q:"Que signifie un parallélisme avec présence de bavures d'usure ?",
+    opts:["Surgonflage du pneumatique","Carrossage excessif","Parallélisme incorrect","Suspension affaissée"],
+    correct:2,
+    expl:"Une usure croissante d'un bord à l'autre avec présence de bavures est due à un parallélisme incorrect. Sans bavures, c'est un problème de carrossage, suspension ou fusée."
+  },
+  {
+    theme:"Liaison au sol", tc:"th-liaison",
+    q:"Comment est calculé l'angle inclus ?",
+    opts:["AI = CA – PI","AI = PI + CA","AI = chasse + carrossage","AI = parallélisme + déport"],
+    correct:1,
+    expl:"L'angle inclus est la somme de l'angle de pivot (PI) et de l'angle de carrossage (CA). Il permet de détecter une déformation du porte-fusée suite à un choc."
+  },
+  {
+    theme:"Liaison au sol", tc:"th-liaison",
+    q:"Quelle usure prématurée indique un sous-gonflage du pneumatique ?",
+    opts:["Usure du milieu de la bande de roulement","Usure des bords extérieurs","Usure d'un bord à l'autre sans bavures","Usure localisée au centre"],
+    correct:1,
+    expl:"L'usure des bords extérieurs est due à un sous-gonflage ou une surcharge. Le milieu du pneu se creuse car les flancs portent davantage que le centre."
+  },
+  {
+    theme:"Liaison au sol", tc:"th-liaison",
+    q:"Quelle est la structure de train avant Mac Pherson ?",
+    opts:["Deux triangles superposés","Une jambe de force + triangulation inférieure par barre antiroulis et tirant","Un essieu rigide","Un triangle inférieur en L"],
+    correct:1,
+    expl:"Le Mac Pherson est composé d'une jambe de force et d'une triangulation inférieure sommaire assurée par la barre antiroulis et un tirant. Exemple : PSA (205, Visa), Renault 14."
+  },
+  {
+    theme:"Liaison au sol", tc:"th-liaison",
+    q:"Quel est le rôle principal de l'amortisseur de vibrations ?",
+    opts:["Supporter le poids du véhicule","Absorber les vibrations en convertissant l'énergie en chaleur","Maintenir la géométrie des roues","Guider les roues en virage"],
+    correct:1,
+    expl:"L'amortisseur absorbe le plus rapidement possible les vibrations générées par la carrosserie et les roues en convertissant l'énergie en chaleur. Sans lui, les roues risqueraient de perdre le contact avec la chaussée."
+  },
+  {
+    theme:"Liaison au sol", tc:"th-liaison",
+    q:"Quelle est la différence entre l'amortisseur monotube et bitube ?",
+    opts:["Le monotube n'a pas d'huile","Le monotube a chambre + huile dans 1 cylindre ; le bitube a 2 tubes emboîtés avec réserve d'huile externe","Le bitube est plus performant en sport","Le monotube est uniquement pour l'arrière"],
+    correct:1,
+    expl:"Dans le monotube, chambre de travail et réserve d'huile sont dans un seul cylindre, le volume est compensé par un gaz à 25-30 bars. Le bitube a 2 tubes emboîtés, la réserve d'huile externe est partiellement remplie."
+  },
+  {
+    theme:"Liaison au sol", tc:"th-liaison",
+    q:"Qu'est-ce que le déport au sol positif ?",
+    opts:["Le point de contact pneu/sol est à l'intérieur du prolongement de l'axe de pivot","Le point de contact pneu/sol est à l'extérieur du prolongement de l'axe de pivot","L'axe de pivot passe par le centre de la roue","Le déport est nul"],
+    correct:1,
+    expl:"Le déport est positif quand le point de contact pneu/sol se trouve à l'extérieur par rapport au prolongement de l'axe de pivotement. Il crée un porte-à-faux sur la fusée, d'où la nécessité de le réduire."
+  },
+
+  // ===== CLIMATISATION – 10 questions =====
+  {
+    theme:"Climatisation", tc:"th-clim",
+    q:"Depuis quelle année le R12 est-il interdit à la commercialisation ?",
+    opts:["1992","1995","2000","2005"],
+    correct:2,
+    expl:"Le R12 est interdit à la commercialisation depuis 2000. Il a été abandonné au profit du R134a en 1992, moins nocif pour l'environnement. Aujourd'hui 75% des véhicules en France sont climatisés."
+  },
+  {
+    theme:"Climatisation", tc:"th-clim",
+    q:"Quelle est la température idéale de confort dans un habitacle climatisé ?",
+    opts:["5 à 15°C","17 à 27°C","28 à 35°C","10 à 16°C"],
+    correct:1,
+    expl:"L'installation de conditionnement vise à maintenir une température de 17 à 27°C, une humidité de 35 à 70%, une vitesse d'air de 0,3 m/s et un débit de 150 m³/h."
+  },
+  {
+    theme:"Climatisation", tc:"th-clim",
+    q:"Qu'est-ce que la transmission de chaleur par conduction ?",
+    opts:["Échange entre un solide et un fluide séparés par une surface","Transfert de chaleur entre corps sans contact, même dans le vide","Chaleur qui coule à travers un moyen par contact direct sans changement de phase","Chaleur transportée par mouvement d'un fluide"],
+    correct:2,
+    expl:"La conduction est le procédé par lequel la chaleur coule d'une zone chaude vers une zone froide à travers un moyen (liquide, solide, gazeux) par contact direct, sans changement de phase."
+  },
+  {
+    theme:"Climatisation", tc:"th-clim",
+    q:"Quelle est la pression d'injection du R134a dans une bouteille à 20°C ?",
+    opts:["1 bar","6,7 bars","15 bars","25 bars"],
+    correct:1,
+    expl:"À 20°C, une bouteille de R134a est à 6,7 bars. En ouvrant la vanne, le fluide se détend à pression atmosphérique et sa température descend à -26,4°C."
+  },
+  {
+    theme:"Climatisation", tc:"th-clim",
+    q:"Quel est le rôle de l'évaporateur ?",
+    opts:["Comprimer le fluide frigorigène","Condenser le fluide sous haute pression","Absorber la chaleur de l'habitacle en vaporisant le fluide","Réguler la pression haute du circuit"],
+    correct:2,
+    expl:"L'évaporateur est l'échangeur dans lequel le fluide passe de l'état liquide à l'état gazeux en absorbant la chaleur de l'air de l'habitacle. C'est lui qui 'fait du froid' dans le véhicule."
+  },
+  {
+    theme:"Climatisation", tc:"th-clim",
+    q:"Dans le diagramme enthalpique, que représente la zone 2 ?",
+    opts:["Fluide 100% liquide","Fluide 100% vapeur","Fluide mélange liquide et vapeur","Zone de surchauffe"],
+    correct:2,
+    expl:"Dans le diagramme enthalpique (Mollier), la zone 2 correspond au fluide en mélange liquide et vapeur. On peut y 'titrer le fluide' : déterminer la proportion de gaz et de liquide à pression et température données."
+  },
+  {
+    theme:"Climatisation", tc:"th-clim",
+    q:"Qu'est-ce que la chaleur latente dans le cycle frigorifique ?",
+    opts:["Chaleur nécessaire pour élever la température d'un corps","Chaleur échangée lors d'un changement d'état sans variation de température","Énergie fournie par le compresseur","Chaleur évacuée par le condenseur"],
+    correct:1,
+    expl:"La chaleur latente est échangée lors d'un changement d'état (liquide→gaz ou gaz→liquide) sans variation de température. C'est ce principe qui est exploité dans le système de climatisation."
+  },
+  {
+    theme:"Climatisation", tc:"th-clim",
+    q:"Dans le cycle frigorigène, quelle est la quantité de chaleur évacuée lors de la condensation (H2-H3) ?",
+    opts:["30 kJ/kg","100 kJ/kg","200 kJ/kg","400 kJ/kg"],
+    correct:2,
+    expl:"La quantité de chaleur évacuée lors de la condensation est H2-H3 = 440-240 = 200 kJ/kg. La compression apporte 30 kJ/kg et la vaporisation absorbe également 200 kJ/kg."
+  },
+  {
+    theme:"Climatisation", tc:"th-clim",
+    q:"Quel est le rôle du dessiccateur dans le système de climatisation ?",
+    opts:["Comprimer le fluide frigorigène","Réguler le débit de fluide","Éliminer l'humidité du circuit pour éviter corrosion et gel","Refroidir le fluide après le compresseur"],
+    correct:2,
+    expl:"Le dessiccateur élimine l'humidité du circuit par un granulat de silicate. Il évite la corrosion et la formation de gel dans les composants. Il fonctionne selon un procédé régénératif, donc exempt d'entretien."
+  },
+  {
+    theme:"Climatisation", tc:"th-clim",
+    q:"Quels sont les deux rôles du clapet de décharge pneumatique dans le système 4CL VAG ?",
+    opts:["Filtrer l'air et réguler le débit","Retenue de la pression résiduelle et limitation de pression maximale","Commander les électrovannes et mesurer la pression","Déshumidifier l'air et protéger le compresseur"],
+    correct:1,
+    expl:"Le clapet de décharge pneumatique remplit deux fonctions : maintenir une pression résiduelle minimum (> 3,5 bar) pour ne pas endommager les soufflets pneumatiques, et limiter la pression maximale du circuit."
+  },
+
+  // ===== INJECTION DIESEL – 10 questions (tirées du fichier HTML existant) =====
+  {
+    theme:"Injection Diesel", tc:"th-diesel",
     q:"Quelle est la plage de pression d'injection sur un système common rail moderne ?",
-    opts:["10 à 100 bars","110 à 175 bars","250 à 2000 bars","50 à 500 bars"], correct:2,
-    expl:"Le common rail injecte de 250 bars au démarrage jusqu'à 2000 bars à pleine charge. Cette haute pression permet une pulvérisation très fine et un meilleur mélange air/carburant." },
-
-  { theme:"Common Rail", tc:"theme-A",
-    q:"Quel est l'avantage principal de l'indépendance du système common rail par rapport au régime moteur ?",
-    opts:["La pression d'injection reste la même quel que soit le régime moteur","L'injection est coupée à haut régime","La pression augmente avec le régime","Le système n'a pas besoin de calculateur"], correct:0,
-    expl:"Contrairement aux anciens systèmes (pompe rotative), la pression dans le rail ne dépend plus du régime moteur. Elle est régulée par le calculateur en permanence, permettant une pression optimale à toutes les situations." },
-
-  { theme:"Common Rail", tc:"theme-A",
-    q:"Combien d'injections par cycle peut réaliser un common rail de 3ème génération ?",
-    opts:["1","3","5","Jusqu'à 8"], correct:3,
-    expl:"Un common rail de 3ème génération peut effectuer jusqu'à 8 injections par cycle. Les 1ère et 2ème générations en faisaient 2 puis 5. Ces injections multiples réduisent le bruit et les émissions polluantes." },
-
-  { theme:"Common Rail", tc:"theme-A",
+    opts:["10 à 100 bars","110 à 175 bars","250 à 2000 bars","50 à 500 bars"],
+    correct:2,
+    expl:"Le common rail injecte de 250 bars au démarrage jusqu'à 2000 bars à pleine charge. Cette haute pression permet une pulvérisation très fine et un meilleur mélange air/carburant."
+  },
+  {
+    theme:"Injection Diesel", tc:"th-diesel",
     q:"Quel est le rôle de l'injection pilote (pré-injection) en common rail ?",
-    opts:["Régénérer le FAP","Injecter la totalité du carburant avant le PMH","Amorcer la combustion avec une infime quantité pour réduire le bruit","Augmenter la puissance maximale"], correct:2,
-    expl:"L'injection pilote injecte 1 à 2 mm³ de carburant pour amorcer la combustion. Cela réduit le bruit et les fumées à froid. Elle est présente jusqu'à environ 3000 tr/min." },
-
-  { theme:"Common Rail", tc:"theme-A",
-    q:"Quel est le rôle de la post-injection en common rail ?",
-    opts:["Augmenter la puissance","Refroidir les injecteurs","Permettre la régénération du FAP et limiter les NOx","Amorcer la combustion principale"], correct:2,
-    expl:"La post-injection permet le fonctionnement du catalyseur, réduit les émissions de NOx et assure les phases de régénération du filtre à particules (FAP/DPF)." },
-
-  { theme:"Common Rail", tc:"theme-A",
-    q:"Quelle quantité de carburant représente environ une injection principale en common rail ?",
-    opts:["1 à 2 mm³","10 mm³","30 mm³","100 mm³"], correct:2,
-    expl:"Une injection principale représente environ 30 mm³. L'injection pilote, elle, n'injecte que 1 à 2 mm³ (infime quantité pour amorcer la combustion sans bruit)." },
-
-  // ===== RAMPE COMMUNE =====
-  { theme:"Rampe commune (rail)", tc:"theme-A",
-    q:"Quel est le rôle principal de la rampe commune (rail) ?",
-    opts:["Générer la haute pression","Filtrer le carburant","Accumuler le carburant sous pression et le distribuer aux injecteurs à pression identique","Commander l'ouverture des injecteurs"], correct:2,
-    expl:"Le rail est un accumulateur hydraulique rigide. Il fournit à chaque injecteur un débit et une pression identiques, adaptés au besoin instantané du moteur. La compressibilité du gasoil à haute pression assure l'effet d'accumulation." },
-
-  { theme:"Rampe commune (rail)", tc:"theme-A",
-    q:"Que se passe-t-il si les injecteurs consomment plus de carburant que la pompe n'en envoie ?",
-    opts:["La pression dans le rail augmente","La pression dans le rail chute","Le régulateur ouvre la vanne de trop-plein","Le limiteur de pression s'ouvre"], correct:1,
-    expl:"Le rail obéit à la loi de compressibilité des fluides : si la consommation dépasse l'apport, la pression chute. C'est pourquoi la régulation est en boucle fermée, avec mesure permanente via le capteur de pression rail." },
-
-  { theme:"Rampe commune (rail)", tc:"theme-A",
-    q:"En quoi est fabriquée la rampe commune ?",
-    opts:["En aluminium moulé","En acier forgé","En fonte","En plastique haute résistance"], correct:1,
-    expl:"La rampe est en acier forgé, adapté à la cylindrée du moteur. Ce matériau lui permet de résister aux pressions extrêmes (jusqu'à 2000 bars) de façon durable." },
-
-  // ===== INJECTEURS MAGNÉTIQUES =====
-  { theme:"Injecteurs magnétiques", tc:"theme-E",
+    opts:["Régénérer le FAP","Injecter la totalité du carburant avant le PMH","Amorcer la combustion avec une infime quantité pour réduire le bruit","Augmenter la puissance maximale"],
+    correct:2,
+    expl:"L'injection pilote injecte 1 à 2 mm³ de carburant pour amorcer la combustion. Cela réduit le bruit et les fumées à froid. Elle est présente jusqu'à environ 3000 tr/min."
+  },
+  {
+    theme:"Injection Diesel", tc:"th-diesel",
     q:"Que signifie le code IMA présent sur un injecteur diesel Bosch ?",
-    opts:["Injection Manuelle Automatique","Injector Mengen Abgleich – équilibrage de débit d'injecteur","Indice de Modulation d'Amplitude","Injection Multi-Arbres"], correct:1,
-    expl:"IMA signifie 'Injector Mengen Abgleich' (équilibrage de débit). Ce code hexadécimal renseigne la dérive de fabrication par rapport à un injecteur étalon. Il doit être programmé dans le calculateur lors du montage." },
-
-  { theme:"Injecteurs magnétiques", tc:"theme-E",
-    q:"De quoi dépend la quantité de carburant injectée par un injecteur magnétique ?",
-    opts:["Uniquement de la durée de commande électrique","De la durée de commande, de la vitesse d'ouverture, du code IMA et de la pression rail","Uniquement de la pression dans le rail","Du nombre de trous de la buse uniquement"], correct:1,
-    expl:"Le débit injecté dépend de la durée de commande (calculateur), de la vitesse d'ouverture de l'injecteur, du débit hydraulique (code IMA) et de la pression dans la rampe HP." },
-
-  { theme:"Injecteurs magnétiques", tc:"theme-E",
-    q:"Comment fonctionne l'ouverture d'un injecteur magnétique ?",
-    opts:["Le ressort pousse directement l'aiguille","L'électrovanne crée un champ magnétique qui soulève le noyau, créant une fuite qui déséquilibre les pressions et soulève l'aiguille","La pression rail soulève directement l'aiguille","Le calculateur commande directement l'aiguille"], correct:1,
-    expl:"Quand l'électrovanne est alimentée, le champ magnétique soulève le noyau, permettant une fuite vers le retour. L'ajutage empêche l'équilibrage des pressions : la chambre de commande se dépressurise, l'aiguille se soulève." },
-
-  { theme:"Injecteurs magnétiques", tc:"theme-E",
-    q:"Combien de trous possède la buse d'un injecteur diesel magnétique standard ?",
-    opts:["1 trou central","3 trous","7 trous à jet symétrique","12 trous"], correct:2,
-    expl:"Les injecteurs diesel comportent 7 trous à jet symétrique pour favoriser le mélange air/carburant. Le nombre et le diamètre des trous influencent directement la finesse de pulvérisation." },
-
-  { theme:"Injecteurs magnétiques", tc:"theme-E",
-    q:"La pression de retour des injecteurs magnétiques en circuit de retour est d'environ :",
-    opts:["0 bar","0,8 bar maximum","5 bars","50 bars"], correct:1,
-    expl:"Les injecteurs diesel sont reliés entre eux par le circuit retour carburant dont la pression est d'environ 0,8 bar maximum. Ce retour carburant sert aussi à la lubrification et au refroidissement des injecteurs." },
-
-  { theme:"Injecteurs magnétiques", tc:"theme-E",
-    q:"Lors du diagnostic des injecteurs par mesure de retour, quel volume en 1 minute indique une défaillance ?",
-    opts:["Plus de 5 ml","Plus de 10 ml","Plus de 20 ml","Plus de 50 ml"], correct:2,
-    expl:"Selon la procédure Bosch (1 min, moteur chaud), un retour supérieur à 20 ml dans un ou plusieurs flacons indique un injecteur défaillant. La procédure impose 30s de ralenti puis 5s à la régulation puis 25s de ralenti." },
-
-  { theme:"Injecteurs magnétiques", tc:"theme-E",
-    q:"Au-delà de quelle correction d'injecteur (en mg/cp) le formateur considère-t-il un dysfonctionnement possible ?",
-    opts:["10 mg/cp","5 mg/cp","1 mg/cp","20 mg/cp"], correct:1,
-    expl:"Les constructeurs indiquent qu'au-delà de 5 mg/cp, il peut y avoir un dysfonctionnement de l'injecteur ou un problème moteur. En pratique, dès 1 mg/cp on peut déjà s'interroger sur l'état de l'injecteur." },
-
-  { theme:"Injecteurs magnétiques", tc:"theme-E",
-    q:"Comment déplacer le problème de rendement d'un cylindre pour savoir si c'est l'injecteur ou le cylindre ?",
-    opts:["Remplacer systématiquement l'injecteur","Changer l'injecteur de cylindre et refaire la mesure paramètre","Faire une compression","Débrancher tous les injecteurs sauf un"], correct:1,
-    expl:"On change l'injecteur de cylindre et on effectue une nouvelle mesure. Si la correction s'est déplacée avec l'injecteur → c'est lui le coupable. Si le problème reste sur le même cylindre → recherche mécanique (compression...)." },
-
-  // ===== INJECTEURS PIÉZOÉLECTRIQUES =====
-  { theme:"Injecteurs piézoélectriques", tc:"theme-E",
-    q:"Quel phénomène est exploité par les injecteurs piézoélectriques ?",
-    opts:["L'effet Hall","L'effet piézoélectrique : déformation d'un cristal sous tension électrique","L'effet Peltier","L'effet magnétostrictif"], correct:1,
-    expl:"L'effet piézoélectrique (découvert par les frères Curie en 1880) désigne la déformation mécanique d'un cristal (quartz, céramique) soumis à une tension électrique. Ce mouvement commande la fuite de l'injecteur." },
-
-  { theme:"Injecteurs piézoélectriques", tc:"theme-E",
-    q:"Que signifie le code ISA sur un injecteur piézoélectrique ?",
-    opts:["Injection Synchronisée Automatique","Injektor Spannungs Abgleich – équilibrage de tension","Index de Sensibilité d'Actionneur","Injection Séquentielle Avancée"], correct:1,
-    expl:"ISA signifie 'Injektor Spannungs Abgleich' (équilibrage de tension d'injecteurs). Comme le code IMA pour les injecteurs magnétiques, il doit être programmé dans le calculateur. Il est spécifique aux injecteurs piézoélectriques." },
-
-  { theme:"Injecteurs piézoélectriques", tc:"theme-E",
-    q:"Quelle tension l'étage de puissance du calculateur fournit-il pour ouvrir un injecteur piézoélectrique ?",
-    opts:["12 volts","48 volts","140 volts (tension Boost)","5 volts"], correct:2,
-    expl:"L'étage de puissance génère une tension Boost de 140 volts pour charger l'actionneur piézo en environ 200 microsecondes. Cette tension rapide permet une ouverture très précise de l'injecteur." },
-
-  { theme:"Injecteurs piézoélectriques", tc:"theme-E",
-    q:"Quel est le courant de charge et de décharge d'un injecteur piézoélectrique ?",
-    opts:["0,5 A","2 A","10 A","50 A"], correct:2,
-    expl:"Lors de l'ouverture (charge) et de la fermeture (décharge), un courant d'environ 10 A s'établit pendant environ 200 microsecondes. C'est ce temps très court qui rend l'injecteur piézo extrêmement rapide et précis." },
-
-  { theme:"Injecteurs piézoélectriques", tc:"theme-E",
-    q:"Lors de la fermeture d'un injecteur magnétique, on observe un pic de tension négatif. À quoi est-il dû ?",
-    opts:["À un court-circuit dans le calculateur","À la tension de self générée par le bobinage lors de la coupure du courant","À la décharge du condensateur C1","À la chute de pression dans le rail"], correct:1,
-    expl:"Quand on coupe le courant dans la bobine, elle génère une tension de self pour maintenir le courant. Cette énergie est récupérée pour charger un condensateur dans le calculateur, utilisé pour alimenter la prochaine injection pilote." },
-
-  { theme:"Injecteurs piézoélectriques", tc:"theme-E",
-    q:"Comment se ferme l'injecteur piézoélectrique ?",
-    opts:["Le calculateur coupe l'alimentation et le ressort referme l'aiguille","Le calculateur ferme T2, déchargeant l'injecteur en sens inverse via un courant de ~10A ; l'actuateur piézo retrouve son état initial","La pression rail referme l'aiguille directement","Le clapet de retour force la fermeture"], correct:1,
-    expl:"La fermeture est commandée par le transistor T2 qui décharge l'injecteur et le condensateur C1 avec un courant inverse d'environ 10 A. Après environ 200 µs, l'actuateur piézo retrouve son état initial et l'injection cesse." },
-
-  // ===== POMPE HAUTE PRESSION =====
-  { theme:"Pompe haute pression", tc:"theme-D",
-    q:"Quel est le rôle du régulateur haute pression carburant (sur la pompe HP) ?",
-    opts:["Mesurer la pression dans le rail","Protéger mécaniquement le circuit en cas de surpression","Contrôler la pression du rail sur commande électrique du calculateur","Réguler le débit de la pompe basse pression"], correct:2,
-    expl:"Le régulateur HP est commandé en RCO par le calculateur. Il agit sur une bille via un électroaimant : plus le courant est élevé (RCO élevé), plus la valeur de disjonction augmente, donc plus la pression rail monte." },
-
-  { theme:"Pompe haute pression", tc:"theme-D",
-    q:"Le calculateur commande le régulateur HP par quel type de signal ?",
-    opts:["Signal analogique 0–5V","Signal numérique CAN","RCO (Rapport Cyclique d'Ouverture)","Courant constant 12V"], correct:2,
-    expl:"Le calculateur utilise un signal RCO (rapport cyclique d'ouverture). RCO maximum = tension maximum = pression maximale dans le rail. RCO minimum = tension minimum = pression minimale." },
-
-  { theme:"Pompe haute pression", tc:"theme-D",
-    q:"Que se passe-t-il quand le régulateur haute pression n'est pas alimenté électriquement ?",
-    opts:["La pression monte à 2000 bars","La pression est limitée à environ 100 bars par le ressort mécanique","Le moteur s'arrête immédiatement","La pression est nulle"], correct:1,
-    expl:"Non alimenté, le régulateur s'ouvre dès que la pression dépasse le tarage du ressort mécanique (environ 100 bars). Il n'y a plus de pression résiduelle dans le circuit HP environ 30 secondes après l'arrêt moteur." },
-
-  { theme:"Pompe haute pression", tc:"theme-D",
-    q:"Que fait le battement de la bille dans le circuit mécanique du régulateur HP ?",
-    opts:["Il ouvre le circuit de retour réservoir","Il amortit les variations de pression dans le circuit HP","Il mesure la pression rail","Il commande l'ouverture des injecteurs"], correct:1,
-    expl:"Le circuit mécanique du régulateur HP assure une pression minimum et amortit les pulsations de pression. Le battement de la bille (18) absorbe les variations dues aux refoulements des pistons de pompe et aux ouvertures d'injecteurs." },
-
-  { theme:"Pompe haute pression", tc:"theme-D",
-    q:"Pourquoi ne faut-il pas intervenir sur le circuit HP dans les 30 secondes suivant l'arrêt du moteur ?",
-    opts:["Car le calculateur envoie encore des signaux","Car le circuit haute pression met 30s à se dépressuriser","Car les injecteurs sont encore chauds","Car la pompe continue à tourner 30s"], correct:1,
-    expl:"Après l'arrêt moteur, la pression résiduelle dans le circuit HP met environ 30 secondes à disparaître. Intervenir avant risque une projection de carburant sous très haute pression, dangereuse pour l'opérateur." },
-
-  { theme:"Pompe haute pression", tc:"theme-D",
-    q:"Quel est le rôle du clapet de lubrification de la pompe HP ?",
-    opts:["Filtrer le carburant à l'entrée de la pompe","Assurer le graissage de la pompe HP si la pression de gavage est trop faible","Limiter la pression de refoulement","Commander le désactivateur du 3ème piston"], correct:1,
-    expl:"Le clapet de lubrification s'ouvre quand la différence entre la pression de gavage et la pression de retour dépasse 0,8 bar. En dessous de ce seuil, il assure le graissage de la pompe même si la pression de gavage est insuffisante." },
-
-  // ===== POMPE BASSE PRESSION =====
-  { theme:"Pompe basse pression", tc:"theme-C",
-    q:"Quel est le rôle de la pompe de gavage (basse pression) ?",
-    opts:["Comprimer le carburant à 2000 bars","Alimenter en carburant la pompe haute pression","Commander l'ouverture des injecteurs","Mesurer la pression dans le rail"], correct:1,
-    expl:"La pompe de gavage achemine le carburant du réservoir (plus bas) vers la pompe haute pression. Un clapet antiretour intégré maintient une pression résiduelle pour éviter le réamorçage au démarrage." },
-
-  { theme:"Pompe basse pression", tc:"theme-C",
-    q:"Quel est le rôle du clapet antiretour intégré à la pompe de gavage ?",
-    opts:["Limiter la pression basse à 10 bars","Maintenir une pression résiduelle dans le circuit pour éviter le réamorçage","Filtrer les impuretés","Commander l'ouverture des injecteurs"], correct:1,
-    expl:"Le clapet antiretour sur le circuit de refoulement maintient une pression résiduelle dans le circuit d'alimentation. Cela évite d'avoir à réamorcer le circuit à chaque démarrage moteur." },
-
-  // ===== INJECTEUR POMPE VAG =====
-  { theme:"Injecteur pompe VAG", tc:"theme-C",
-    q:"Quelle est la pression maximale que peut atteindre un injecteur-pompe piézoélectrique VAG (PPD 1.1) ?",
-    opts:["500 bars","1000 bars","1750 bars","2200 bars"], correct:3,
-    expl:"L'injecteur-pompe piézoélectrique PPD 1.1 peut atteindre 2200 bars dans sa plage élargie (130-2200 bars). Il est 4 fois plus rapide que la version magnétique PDE-P2 et permet de réduire les polluants tout en augmentant la puissance." },
-
-  { theme:"Injecteur pompe VAG", tc:"theme-C",
-    q:"Qu'est-ce qui déclenche le début d'injection dans un injecteur-pompe magnétique PDE-P2 ?",
-    opts:["L'ouverture de l'électrovanne","La fermeture de l'électrovanne qui obture le canal d'alimentation, permettant la montée en pression","La descente directe de la came","La pression dans le rail commun"], correct:1,
-    expl:"Dans le PDE-P2, l'électrovanne alimentée obture le canal d'alimentation. La came repousse le piston de pompe, la pression monte dans la chambre HP. Dès que la pression dépasse le tarage du ressort, l'aiguille se soulève." },
-
-  // ===== MOTEUR DIESEL / COMBUSTION =====
-  { theme:"Moteur Diesel", tc:"theme-B",
-    q:"Quel est le rapport volumétrique typique d'un moteur diesel ?",
-    opts:["8 à 11:1","14 à 25:1","5 à 7:1","30 à 40:1"], correct:1,
-    expl:"Le rapport volumétrique du moteur diesel est de 14 à 25:1. Ce fort taux de compression permet d'atteindre environ 500°C, température suffisante pour l'auto-inflammation du gazole." },
-
-  { theme:"Moteur Diesel", tc:"theme-B",
-    q:"Quelle est la pression en fin de compression dans un moteur diesel ?",
-    opts:["5 à 10 bars","25 à 30 bars","60 à 100 bars","150 à 200 bars"], correct:1,
-    expl:"La pression en fin de compression se situe entre 25 et 30 bars. Après auto-inflammation, elle monte de 60 à 100 bars." },
-
-  { theme:"Combustion", tc:"theme-B",
-    q:"Qu'est-ce que le délai d'injection dans la chronologie de combustion ?",
-    opts:["Temps entre refoulement pompe et ouverture de l'injecteur","Temps entre ouverture et fermeture de l'injecteur","Durée de la propagation de la flamme","Durée totale de la combustion"], correct:0,
-    expl:"Le délai d'injection (A'→A) est le temps entre le refoulement de la pompe d'injection et l'ouverture effective de l'injecteur. Il correspond au temps de mise en pression du circuit HP jusqu'au seuil d'ouverture de l'injecteur." },
-
-  { theme:"Combustion", tc:"theme-B",
-    q:"Qu'est-ce que le délai d'inflammation dans la chronologie de combustion diesel ?",
-    opts:["Temps entre refoulement pompe et ouverture injecteur","Temps entre ouverture de l'injecteur et inflammation du mélange","Durée de la postcombustion","Durée de l'injection principale"], correct:1,
-    expl:"Le délai d'inflammation (A→B) est le temps entre l'ouverture de l'injecteur et l'inflammation du mélange air-carburant. Un long délai aggrave le cognement car plus de carburant s'accumule avant de s'enflammer." },
-
-  { theme:"Combustion", tc:"theme-B",
-    q:"Quelle phase de la combustion diesel provoque le cognement caractéristique ?",
-    opts:["La postcombustion","Le cracking du combustible","La décomposition des peroxydes","Le délai d'injection"], correct:2,
-    expl:"La décomposition des peroxydes (B→C) est une réaction brutale responsable du cognement. L'inflammation s'amorce en une multitude de points à très grande vitesse, provoquant une montée en pression soudaine." },
-
-  { theme:"Combustion", tc:"theme-B",
-    q:"Qu'est-ce que le cracking du combustible lors de la combustion principale ?",
-    opts:["Un allumage par étincelle","La brisure des molécules du carburant sous l'effet de la chaleur","La formation d'oxydes d'azote","L'injection pilote avant la combustion principale"], correct:1,
-    expl:"Le cracking (C→D) correspond à la brisure des molécules sous l'effet de la chaleur. La teneur en carbone diminue, la vitesse de combustion ralentit : c'est la phase contrôlée. Le cognement cesse." },
-
-  { theme:"Combustion", tc:"theme-B",
-    q:"La vitesse de la flamme dans un moteur diesel est :",
-    opts:["Subsonique (< vitesse du son)","Égale à la vitesse du son","Supersonique (> vitesse du son)","Variable selon la charge"], correct:2,
-    expl:"Dans un moteur diesel, la flamme est supersonique (> 333 m/s) : on parle de détonation. Dans un moteur essence, elle est subsonique (déflagration). La vitesse du son est de 1200 km/h soit 333 m/s." },
-
-  { theme:"Combustion", tc:"theme-B",
-    q:"Que produit la combustion principale (cracking) dans le cylindre ?",
-    opts:["Uniquement de l'eau et du CO2","Des produits gazeux légers qui brûlent ET des produits lourds goudronneux plus difficiles à brûler","Uniquement des NOx","Des hydrocarbures non brûlés uniquement"], correct:1,
-    expl:"Le cracking donne naissance à des produits gazeux légers qui brûlent facilement, et à des produits plus lourds (goudronneux) plus difficiles à brûler. Ces derniers contribuent aux imbrûlés de la postcombustion." },
-
-  { theme:"Combustion", tc:"theme-B",
-    q:"Pourquoi la postcombustion doit-elle être la plus courte possible ?",
-    opts:["Pour réduire la pression dans le cylindre","Car toute durée supplémentaire augmente la température des gaz d'échappement et baisse le rendement","Pour éviter le cognement","Pour protéger le turbocompresseur"], correct:1,
-    expl:"La postcombustion prolongée augmente la température des gaz d'échappement et réduit le rendement du moteur. Elle est liée à la qualité de pulvérisation et à la combustion principale : une mauvaise combustion = longue postcombustion." },
-
-  // ===== COMBUSTIBLES =====
-  { theme:"Combustibles", tc:"theme-A",
+    opts:["Injection Manuelle Automatique","Injector Mengen Abgleich – équilibrage de débit d'injecteur","Indice de Modulation d'Amplitude","Injection Multi-Arbres"],
+    correct:1,
+    expl:"IMA signifie 'Injector Mengen Abgleich' (équilibrage de débit). Ce code hexadécimal renseigne la dérive de fabrication par rapport à un injecteur étalon. Il doit être programmé dans le calculateur lors du montage."
+  },
+  {
+    theme:"Injection Diesel", tc:"th-diesel",
     q:"Quelle est la température d'auto-inflammation du gazole ?",
-    opts:["120°C","257°C","350°C","450°C"], correct:1,
-    expl:"La température d'auto-inflammation du gazole est de 257°C. C'est ce phénomène qui déclenche la combustion dans le moteur diesel, sans bougie d'allumage." },
-
-  { theme:"Combustibles", tc:"theme-A",
+    opts:["120°C","257°C","350°C","450°C"],
+    correct:1,
+    expl:"La température d'auto-inflammation du gazole est de 257°C. C'est ce phénomène qui déclenche la combustion dans le moteur diesel, sans bougie d'allumage."
+  },
+  {
+    theme:"Injection Diesel", tc:"th-diesel",
+    q:"Quel est le rapport volumétrique typique d'un moteur diesel ?",
+    opts:["8 à 11:1","14 à 25:1","5 à 7:1","30 à 40:1"],
+    correct:1,
+    expl:"Le rapport volumétrique du moteur diesel est de 14 à 25:1. Ce fort taux de compression permet d'atteindre environ 500°C, température suffisante pour l'auto-inflammation du gazole."
+  },
+  {
+    theme:"Injection Diesel", tc:"th-diesel",
+    q:"Comment fonctionne l'ouverture d'un injecteur magnétique ?",
+    opts:["Le ressort pousse directement l'aiguille","L'électrovanne crée un champ magnétique qui soulève le noyau, déséquilibre les pressions et soulève l'aiguille","La pression rail soulève directement l'aiguille","Le calculateur commande directement l'aiguille"],
+    correct:1,
+    expl:"Quand l'électrovanne est alimentée, le champ magnétique soulève le noyau, permettant une fuite vers le retour. La chambre de commande se dépressurise, l'aiguille se soulève."
+  },
+  {
+    theme:"Injection Diesel", tc:"th-diesel",
+    q:"Quel phénomène est exploité par les injecteurs piézoélectriques ?",
+    opts:["L'effet Hall","L'effet piézoélectrique : déformation d'un cristal sous tension électrique","L'effet Peltier","L'effet magnétostrictif"],
+    correct:1,
+    expl:"L'effet piézoélectrique (découvert par les frères Curie en 1880) désigne la déformation mécanique d'un cristal (quartz, céramique) soumis à une tension électrique. Ce mouvement commande la fuite de l'injecteur."
+  },
+  {
+    theme:"Injection Diesel", tc:"th-diesel",
+    q:"Quel est le rôle de la pompe de gavage (basse pression) ?",
+    opts:["Comprimer le carburant à 2000 bars","Alimenter en carburant la pompe haute pression","Commander l'ouverture des injecteurs","Mesurer la pression dans le rail"],
+    correct:1,
+    expl:"La pompe de gavage achemine le carburant du réservoir vers la pompe haute pression. Un clapet antiretour intégré maintient une pression résiduelle pour éviter le réamorçage au démarrage."
+  },
+  {
+    theme:"Injection Diesel", tc:"th-diesel",
+    q:"Quelle phase de la combustion diesel provoque le cognement caractéristique ?",
+    opts:["La postcombustion","Le cracking du combustible","La décomposition des peroxydes","Le délai d'injection"],
+    correct:2,
+    expl:"La décomposition des peroxydes est une réaction brutale responsable du cognement. L'inflammation s'amorce en une multitude de points à très grande vitesse, provoquant une montée en pression soudaine."
+  },
+  {
+    theme:"Injection Diesel", tc:"th-diesel",
     q:"Quel indice de cétane minimum est requis pour le gazole moteur ?",
-    opts:["25","35","50","70"], correct:2,
-    expl:"L'indice de cétane doit être égal ou supérieur à 50. Un indice élevé garantit un démarrage à froid facile, un fonctionnement silencieux et un couple régulier." },
-
-  { theme:"Combustibles", tc:"theme-A",
-    q:"Quelle est la masse volumique du gazole à 15°C ?",
-    opts:["1,2 kg/l","0,65 kg/l","0,81 kg/l","1,0 kg/l"], correct:2,
-    expl:"La masse volumique du gasoil est de 0,81 kg/l à 15°C. Les pompes d'alimentation diesel étant volumiques, cette constante est importante pour maintenir un réglage d'injection correct." },
-
-  { theme:"Combustibles", tc:"theme-A",
-    q:"Quelle est la viscosité maximale du gazole à 20°C ?",
-    opts:["1 centistoke","2 centistokes","4,5 centistokes","10 centistokes"], correct:2,
-    expl:"La viscosité est inférieure ou égale à 4,5 centistokes à 20°C. Elle influe sur la pulvérisation et la lubrification des injecteurs. Le gazole est environ 9,5 fois plus visqueux que l'eau." },
-
-  { theme:"Combustibles", tc:"theme-A",
-    q:"Le cétane (hexadécane) possède combien d'atomes de carbone ?",
-    opts:["8","12","16","20"], correct:2,
-    expl:"Le cétane ou hexadécane est un hydrocarbure saturé (famille des alcanes) avec 16 atomes de carbone (C16H34). Il entre dans la composition du gazole et sert de référence à l'indice de cétane (IC=100)." },
-
-  { theme:"Combustibles", tc:"theme-A",
-    q:"En hiver, quel est le point d'écoulement maximum autorisé pour le gazole ?",
-    opts:["-3°C","0°C","-7°C","-12°C"], correct:3,
-    expl:"En hiver (15/09 au 14/03), le point d'écoulement doit être ≤ -12°C. En été, cette limite est de -7°C. En dessous, des cristaux de paraffine peuvent colmater les filtres." },
-
-  { theme:"Combustibles", tc:"theme-A",
-    q:"Quelle couleur a le gazole destiné à l'usage agricole et domestique ?",
-    opts:["Incolore","Jaune orangé","Bleu","Rouge"], correct:3,
-    expl:"Le fuel agricole et domestique est teint en rouge. Le gazole moteur est jaune orangé et le carburant naval est bleu. Ces couleurs permettent d'appliquer des taxes différentes." },
-
-  { theme:"Combustibles", tc:"theme-A",
-    q:"Quelle est la teneur en eau et sédiments autorisée dans le gazole ?",
-    opts:["Moins de 5%","Moins de 1%","Inférieure à 0,5%","Elle doit être nulle"], correct:3,
-    expl:"La teneur en eau et sédiments doit être nulle. Les pompes et injecteurs sont des organes de plus en plus précis, toute impureté pouvant provoquer des dommages irréparables." },
-
-  // ===== INJECTION INDIRECTE =====
-  { theme:"Injection indirecte", tc:"theme-C",
-    q:"Quelle pression génère la pompe rotative en injection indirecte ?",
-    opts:["10 à 50 bars","110 à 175 bars","500 à 1000 bars","2000 bars"], correct:1,
-    expl:"En injection indirecte, la pompe rotative génère 110 à 175 bars. Elle est synchronisée à la distribution moteur et dessert chaque cylindre dans l'ordre d'allumage." },
-
-  { theme:"Injection indirecte", tc:"theme-C",
-    q:"Dans un système à injection indirecte, qu'est-ce qui détermine la pression d'ouverture des injecteurs ?",
-    opts:["Le calculateur moteur","La tension de commande électrique","Un ressort taré","La pression dans le rail"], correct:2,
-    expl:"En injection indirecte, les injecteurs sont purement mécaniques. C'est un ressort taré qui détermine leur pression d'ouverture, sans aucune commande électronique." },
-
-  { theme:"Injection indirecte", tc:"theme-C",
-    q:"Où débouche l'injecteur dans un système à injection indirecte ?",
-    opts:["Directement dans le cylindre au-dessus du piston","Dans une préchambre en communication avec la chambre de combustion","Dans le collecteur d'admission","Dans la rampe commune"], correct:1,
-    expl:"En injection indirecte, l'injecteur débouche dans une préchambre reliée à la chambre de combustion. Une précombustion s'y produit, puis la réaction en chaîne provoque la combustion dans la chambre principale." }
-
+    opts:["25","35","50","70"],
+    correct:2,
+    expl:"L'indice de cétane doit être égal ou supérieur à 50. Un indice élevé garantit un démarrage à froid facile, un fonctionnement silencieux et un couple régulier."
+  }
 ];
 
 let current = 0, score = 0, answered = false, userAnswers = [];
 let shuffled = [], timerInterval = null, timeLeft = TIMER_DURATION;
 
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length-1; i>0; i--) { const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
-  return a;
-}
-
 function checkPrenom() {
   document.getElementById('btn-start').disabled = document.getElementById('prenom').value.trim().length < 2;
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length-1; i>0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
 }
 
 function startQuiz() {
@@ -543,15 +727,15 @@ function show(id) {
 function startTimer() {
   clearInterval(timerInterval);
   timeLeft = TIMER_DURATION;
-  updateTimerDisplay();
+  updateTimer();
   timerInterval = setInterval(() => {
     timeLeft--;
-    updateTimerDisplay();
+    updateTimer();
     if (timeLeft <= 0) { clearInterval(timerInterval); if (!answered) timeUp(); }
   }, 1000);
 }
 
-function updateTimerDisplay() {
+function updateTimer() {
   const el = document.getElementById('timer-circle');
   el.textContent = timeLeft;
   el.className = 'timer-circle';
@@ -563,29 +747,29 @@ function timeUp() {
   answered = true;
   const q = shuffled[current];
   userAnswers.push({ theme: q.theme, correct: false, q: q.q });
-  document.querySelectorAll('.opt').forEach((b, i) => { b.disabled = true; if (i === q.correct) b.classList.add('correct'); });
+  document.querySelectorAll('.opt').forEach((b, i) => {
+    b.disabled = true;
+    if (i === q.correct) b.classList.add('correct');
+  });
   const fb = document.getElementById('feedback');
   fb.style.display = 'block'; fb.className = 'feedback wrong';
   document.getElementById('fb-title').textContent = '⏱ Temps écoulé !';
   document.getElementById('fb-text').textContent = q.expl;
-  const nb = document.getElementById('next-btn');
-  nb.style.display = 'block';
-  nb.textContent = current < shuffled.length-1 ? 'Question suivante →' : 'Voir mon résultat';
-  nb.onclick = () => { current++; current < shuffled.length ? renderQ() : showResults(); };
+  showNext();
 }
 
 function renderQ() {
   const q = shuffled[current];
   answered = false;
   document.getElementById('q-num').textContent = `Question ${current+1} / ${shuffled.length}`;
-  document.getElementById('q-score').textContent = `Score : ${score}`;
+  document.getElementById('q-score').textContent = score;
   document.getElementById('progress-fill').style.width = `${(current/shuffled.length)*100}%`;
   const themeEl = document.getElementById('q-theme');
   themeEl.textContent = q.theme;
   themeEl.className = 'theme-tag ' + q.tc;
   document.getElementById('q-text').textContent = q.q;
   const fb = document.getElementById('feedback');
-  fb.style.display = 'none'; fb.className = 'feedback';
+  fb.style.display = 'none';
   document.getElementById('next-btn').style.display = 'none';
   const opts = document.getElementById('q-options');
   opts.innerHTML = '';
@@ -617,6 +801,11 @@ function answer(idx) {
   fb.className = 'feedback ' + (ok ? 'correct' : 'wrong');
   document.getElementById('fb-title').textContent = ok ? '✓ Bonne réponse !' : '✗ Pas tout à fait…';
   document.getElementById('fb-text').textContent = q.expl;
+  document.getElementById('q-score').textContent = score;
+  showNext();
+}
+
+function showNext() {
   const nb = document.getElementById('next-btn');
   nb.style.display = 'block';
   nb.textContent = current < shuffled.length-1 ? 'Question suivante →' : 'Voir mon résultat';
@@ -630,30 +819,19 @@ function showResults() {
   document.getElementById('res-score').textContent = `${score} / ${shuffled.length}`;
   document.getElementById('res-pct').textContent = `soit ${pct}% de bonnes réponses`;
   let icon, mention, cls;
-  if (pct >= 80) { icon='🏆'; mention='Excellent – Maîtrise acquise'; cls='excellent'; }
+  if (pct >= 80)      { icon='🏆'; mention='Excellent – Maîtrise acquise'; cls='excellent'; }
   else if (pct >= 60) { icon='👍'; mention='Bien – Quelques points à revoir'; cls='bien'; }
   else if (pct >= 40) { icon='📖'; mention='Passable – Revoir le cours'; cls='passable'; }
-  else { icon='⚠️'; mention='Insuffisant – Cours à relire attentivement'; cls='insuffisant'; }
+  else                { icon='⚠️'; mention='Insuffisant – Cours à relire'; cls='insuffisant'; }
   document.getElementById('res-icon').textContent = icon;
   const m = document.getElementById('res-mention');
   m.textContent = mention; m.className = `mention ${cls}`;
-  document.getElementById('sending-msg').textContent = '';
-  sendToSheets(pct);
-
-  const recap = document.getElementById('recap-list');
-  recap.innerHTML = '';
-  document.getElementById('recap-title').style.display = 'block';
-  userAnswers.forEach((a, i) => {
-    const el = document.createElement('div');
-    el.className = 'recap-item';
-    el.innerHTML = `<span class="dot ${a.correct?'ok':'ko'}"></span><span><strong>Q${i+1}</strong> — ${a.theme} : ${a.correct ? 'Correct ✓' : 'Incorrect ✗'}</span>`;
-    recap.appendChild(el);
-  });
 
   const erreurs = userAnswers.filter(a => !a.correct);
   if (erreurs.length > 0) {
     document.getElementById('erreurs-card').style.display = 'block';
-    document.getElementById('nb-erreurs').textContent = `${erreurs.length} erreur${erreurs.length>1?'s':''} sur ${shuffled.length} questions`;
+    document.getElementById('btn-download').style.display = 'block';
+    document.getElementById('nb-erreurs').textContent = `${erreurs.length} erreur${erreurs.length>1?'s':''}`;
     const errList = document.getElementById('erreurs-list');
     errList.innerHTML = '';
     userAnswers.forEach((a, i) => {
@@ -661,8 +839,7 @@ function showResults() {
       const q = shuffled[i];
       const div = document.createElement('div');
       div.className = 'erreur-item';
-      div.innerHTML = `
-        <div class="erreur-theme">${q.theme}</div>
+      div.innerHTML = `<div class="erreur-theme">${q.theme}</div>
         <div class="erreur-q">Q${i+1}. ${q.q}</div>
         <div class="erreur-bonne">✓ Bonne réponse : ${q.opts[q.correct]}</div>
         <div class="erreur-expl">💡 ${q.expl}</div>`;
@@ -671,54 +848,81 @@ function showResults() {
   }
 }
 
-function telechargerPDF() {
+function telechargerFiche() {
   const prenom = document.getElementById('prenom').value.trim();
   const pct = Math.round((score/shuffled.length)*100);
   const date = new Date().toLocaleDateString('fr-FR');
-  let html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
-  <style>body{font-family:Arial,sans-serif;max-width:700px;margin:40px auto;color:#1E293B}h1{color:#2563EB;font-size:22px;margin-bottom:4px}.meta{font-size:13px;color:#94A3B8;margin-bottom:24px}.score-box{background:#EFF6FF;border:2px solid #BFDBFE;border-radius:10px;padding:16px 20px;margin-bottom:28px;display:flex;align-items:center;gap:20px}.score-num{font-size:36px;font-weight:700;color:#2563EB}.score-label{font-size:14px;color:#475569}h2{color:#DC2626;font-size:16px;border-bottom:2px solid #FECACA;padding-bottom:6px;margin-bottom:16px}.erreur{border:1.5px solid #FECACA;border-radius:8px;padding:14px 16px;margin-bottom:14px;background:#FEF2F2}.theme{font-size:11px;font-weight:700;color:#DC2626;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}.question{font-size:14px;font-weight:700;color:#0F172A;margin-bottom:8px}.bonne{font-size:13px;color:#16A34A;font-weight:700;margin-bottom:6px}.expl{font-size:13px;color:#475569;border-top:1px solid #FECACA;padding-top:8px;line-height:1.6}.footer{margin-top:30px;font-size:11px;color:#94A3B8;text-align:center}</style></head><body>
-  <h1>Fiche de révision – Injection Diesel</h1>
-  <div class="meta">BTS MVVP · ${prenom} · ${date}</div>
-  <div class="score-box"><div class="score-num">${score}/${shuffled.length}</div><div class="score-label">Score final<br><strong>${pct}%</strong> de bonnes réponses</div></div>
-  <h2>Mes erreurs à retravailler</h2>`;
+
+  const themeColors = {
+    'Liaison au sol': '#F97316',
+    'Climatisation':  '#3B82F6',
+    'Injection Diesel': '#10B981'
+  };
+
+  let erreursHTML = '';
   userAnswers.forEach((a, i) => {
     if (a.correct) return;
     const q = shuffled[i];
-    html += `<div class="erreur"><div class="theme">${q.theme}</div><div class="question">Q${i+1}. ${q.q}</div><div class="bonne">✓ Bonne réponse : ${q.opts[q.correct]}</div><div class="expl">💡 ${q.expl}</div></div>`;
+    const color = themeColors[q.theme] || '#888';
+    erreursHTML += `
+      <div style="border:1.5px solid #e2e8f0;border-left:4px solid ${color};border-radius:8px;padding:14px 16px;margin-bottom:14px;background:#fff;">
+        <div style="font-size:11px;font-weight:700;color:${color};text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">${q.theme}</div>
+        <div style="font-size:15px;font-weight:700;color:#1e293b;margin-bottom:8px;">Q${i+1}. ${q.q}</div>
+        <div style="font-size:13px;color:#16a34a;font-weight:600;margin-bottom:6px;">✓ Bonne réponse : ${q.opts[q.correct]}</div>
+        <div style="font-size:13px;color:#475569;border-top:1px solid #f1f5f9;padding-top:8px;line-height:1.6;">💡 ${q.expl}</div>
+      </div>`;
   });
-  html += `<div class="footer">BTS MVVP – Quiz formatif Injection Diesel – 50 questions</div></body></html>`;
-  const blob = new Blob([html], { type: 'text/html' });
+
+  const nbErreurs = userAnswers.filter(a => !a.correct).length;
+
+  const html = `<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8">
+<title>Fiche révision – ${prenom}</title>
+<style>
+  body{font-family:Arial,sans-serif;max-width:720px;margin:40px auto;color:#1e293b;padding:0 20px;}
+  h1{font-size:24px;color:#0f172a;margin-bottom:4px;}
+  .meta{font-size:13px;color:#94a3b8;margin-bottom:24px;}
+  .score-box{background:#f8fafc;border:2px solid #e2e8f0;border-radius:10px;padding:16px 20px;margin-bottom:28px;display:flex;align-items:center;gap:24px;}
+  .score-num{font-size:40px;font-weight:700;color:#F97316;}
+  .score-info{font-size:14px;color:#475569;}
+  .score-info strong{color:#0f172a;}
+  h2{font-size:16px;color:#dc2626;border-bottom:2px solid #fee2e2;padding-bottom:6px;margin-bottom:16px;}
+  .legend{display:flex;gap:16px;margin-bottom:20px;font-size:12px;}
+  .dot{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:middle;}
+  .footer{margin-top:36px;font-size:11px;color:#94a3b8;text-align:center;border-top:1px solid #e2e8f0;padding-top:16px;}
+</style>
+</head><body>
+<h1>📋 Fiche de révision – BTS MVVP</h1>
+<div class="meta">Liaison au sol · Climatisation · Injection Diesel &nbsp;|&nbsp; ${prenom} &nbsp;|&nbsp; ${date}</div>
+<div class="score-box">
+  <div class="score-num">${score}/${shuffled.length}</div>
+  <div class="score-info">Score final : <strong>${pct}%</strong> de bonnes réponses<br>${nbErreurs} point${nbErreurs>1?'s':''} à retravailler</div>
+</div>
+<div class="legend">
+  <span><span class="dot" style="background:#F97316"></span>Liaison au sol</span>
+  <span><span class="dot" style="background:#3B82F6"></span>Climatisation</span>
+  <span><span class="dot" style="background:#10B981"></span>Injection Diesel</span>
+</div>
+<h2>❌ Mes erreurs à retravailler (${nbErreurs})</h2>
+${erreursHTML}
+<div class="footer">BTS MVVP – Évaluation générale · 30 questions · Généré le ${date}</div>
+</body></html>`;
+
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = `fiche_revision_${prenom.replace(/ /g,'_')}_injection_diesel.html`; a.click();
+  a.href = url;
+  a.download = `fiche_revision_${prenom.replace(/ /g,'_')}_MVVP.html`;
+  a.click();
   URL.revokeObjectURL(url);
-}
-
-function sendToSheets(pct) {
-  const prenom = document.getElementById('prenom').value.trim();
-  const now = new Date().toLocaleString('fr-FR');
-  const detail = userAnswers.map((a,i) => `Q${i+1}:${a.correct?'✓':'✗'}`).join(' | ');
-  const payload = { prenom, date: now, score: `${score}/${shuffled.length}`, pourcentage: `${pct}%`, detail };
-  document.getElementById('sending-msg').textContent = '⏳ Envoi des résultats en cours…';
-  fetch(APPS_SCRIPT_URL, {
-    method: 'POST', mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  }).then(() => {
-    document.getElementById('sending-msg').textContent = '✅ Résultats envoyés à votre formateur.';
-  }).catch(() => {
-    document.getElementById('sending-msg').textContent = '❌ Erreur d\'envoi — vérifiez la connexion.';
-  });
 }
 
 function restart() {
   document.getElementById('prenom').value = '';
   document.getElementById('btn-start').disabled = true;
   document.getElementById('erreurs-card').style.display = 'none';
-  document.getElementById('access-code').value = '';
-  document.getElementById('btn-code').disabled = true;
-  document.getElementById('code-error').style.display = 'none';
-  show('screen-code');
+  document.getElementById('btn-download').style.display = 'none';
+  show('screen-home');
 }
 </script>
 </body>
